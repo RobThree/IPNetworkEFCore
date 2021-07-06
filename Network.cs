@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 
@@ -65,4 +67,15 @@ namespace IPNetworkEFCore
         }
     }
 
+    internal class NetworkConfig : IEntityTypeConfiguration<Network>
+    {
+        public void Configure(EntityTypeBuilder<Network> entity)
+        {
+            entity.Property("_prefixbytes")
+                .HasColumnName(nameof(Network.Prefix));
+            entity.Property("_last")
+                .HasColumnName("Last");
+            entity.HasIndex(new[] { "_prefixbytes", "_last" }).IsUnique();
+        }
+    }
 }
